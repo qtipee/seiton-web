@@ -27,7 +27,7 @@ export const useArticleService = () => {
     /**
      * Update an article in the database.
      */
-    const updateArticleInDatabase = async (id: string, article: Article): Promise<boolean> => {
+    const updateArticle = async (id: string, article: Article): Promise<boolean> => {
         return await $database.updateArticle(id, article);
     };
 
@@ -35,7 +35,7 @@ export const useArticleService = () => {
      * Update the quantity of the given articles.
      * Use this method to update the articles' stock after a client buys some of them.
      */
-    const updateArticlesQuantityInDatabase = async (updatedArticles: Article[]): Promise<void> => {
+    const updateArticlesQuantity = async (updatedArticles: Article[]): Promise<void> => {
         if (updatedArticles.length === 0) {
             return;
         }
@@ -47,7 +47,7 @@ export const useArticleService = () => {
         getArticles,
         getArticle,
         addArticle,
-        updateArticleInDatabase,
-        updateArticlesQuantityInDatabase,
+        updateArticle,
+        updateArticlesQuantity,
     };
 }

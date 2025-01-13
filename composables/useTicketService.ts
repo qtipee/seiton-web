@@ -17,7 +17,7 @@ export const useTicketService = () => {
     /**
      * Create a new ticket and save it to the database.
      */
-    const createNewTicket = async (ticket: Ticket): Promise<string | null> => {
+    const createTicket = async (ticket: Ticket): Promise<string | null> => {
         return await $database.createTicket(ticket);
     };
 
@@ -35,7 +35,7 @@ export const useTicketService = () => {
     return {
         tickets: computed(() => tickets.value),
         setTickets,
-        createNewTicket,
+        createTicket,
         getTicketById,
     };
 }

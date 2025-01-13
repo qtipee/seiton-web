@@ -1,80 +1,26 @@
 <template>
-    <div class="actions-container">
-        <button
-        class="action-button"
-        :disabled="globalActionsDisabled"
-        @click="handleCashPayment"
-        >
-            <img src="" alt="Cash Payment" />
-        </button>
-        <button
-        class="action-button"
-        :disabled="globalActionsDisabled"
-        @click="handleTerminalPayment"
-        >
-            <img src="" alt="Card Payment" />
-        </button>
-        <button
-        class="action-button"
-        :disabled="globalActionsDisabled"
-        @click="addTicket"
-        >
-            <img src="" alt="Add Ticket" />
-        </button>
-        <button
-        class="action-button"
-        :disabled="globalActionsDisabled"
-        @click="showWarningDeleteTicket = true"
-        >
-            <img src="" alt="Delete Ticket" />
-        </button>
+    <header class="bg-white shadow">
+        <div class="flex justify-between items-center mx-auto max-w-7xl px-4 py-2 sm:px-6 lg:px-8">
+            <h1 class="text-2xl font-bold">Caisse</h1>
+            <IconsShoppingCart class="w-10 h-10 p-2 rounded-full text-white bg-green-500" @click="addNewTicket" />
+        </div>
+    </header>
 
-        <!--Modal v-if="showSheetCashPayment" @close="showSheetCashPayment = false">
-            <CashPaymentSheet
-            :amount="scannedArticlesStore.currentTicket.totalPrice"
-            @save="validateList"
-            />
-        </Modal>
-
-        <Modal v-if="showSheetTerminalPayment" @close="showSheetTerminalPayment = false">
-            <CardPaymentSheet
-            :amount="scannedArticlesStore.currentTicket.totalPrice"
-            @save="validateList"
-            />
-        </Modal>
-
-        <Modal v-if="showWarningDeleteTicket" @close="showWarningDeleteTicket = false">
-            <WarningModal
-            message="Supprimer le Ticket ?"
-            @confirm="deleteCurrentGroup"
-            />
-        </Modal-->
-    </div>
+    <main>
+        <div class="mx-auto">
+            <CashRegisterScannedArticlesList />
+            <CashRegisterGlobalActions />
+        </div>
+    </main>
 </template>
 
 <script setup lang="ts">
+import { useScannedArticlesStore } from '~/stores/scannedArticlesStore';
+
 const scannedArticlesStore = useScannedArticlesStore();
-const showSheetCashPayment = ref(false);
-const showSheetTerminalPayment = ref(false);
-const showWarningDeleteTicket = ref(false);
+
+/// NEW TICKET ///
+const addNewTicket = () => {
+    scannedArticlesStore.addNewTicket();
+};
 </script>
-
-<style scoped>
-.actions-container {
-    display: flex;
-    gap: 10px;
-}
-
-.action-button {
-    background: white;
-    border: none;
-    padding: 10px;
-    border-radius: 8px;
-    cursor: pointer;
-}
-
-.action-button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-</style>  
