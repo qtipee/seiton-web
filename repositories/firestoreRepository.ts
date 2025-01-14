@@ -9,12 +9,12 @@ import type { Ticket } from '~/interfaces/ticket';
 export class FirestoreRepository implements DatabaseRepository {
     private db = getFirestore();
     
-    // ARTICLES
+    /// ARTICLES ///
     
     async getArticles(): Promise<Article[]> {
         try {
             const snapshot = await getDocs(collection(this.db, 'articles'));
-            return snapshot.docs.map((doc) => doc.data() as Article);
+            return snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id } as Article));
         } catch (error) {
             console.error('Error fetching articles:', error);
             return [];
@@ -70,12 +70,12 @@ export class FirestoreRepository implements DatabaseRepository {
         }
     }
     
-    // TICKETS
+    /// TICKETS ///
     
     async getTickets(): Promise<Ticket[]> {
         try {
             const snapshot = await getDocs(collection(this.db, 'tickets'));
-            return snapshot.docs.map((doc) => doc.data() as Ticket);
+            return snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id } as Ticket));
         } catch (error) {
             console.error('Error fetching tickets:', error);
             return [];

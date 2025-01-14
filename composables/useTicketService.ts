@@ -7,18 +7,10 @@ export const useTicketService = () => {
     const tickets = ref<Ticket[]>([]);
 
     /**
-     * Fetch the tickets from the database and store them.
+     * Return all tickets from the database.
      */
-    const setTickets = async (): Promise<void> => {
-        const fetchedTickets = await $database.getTickets();
-        tickets.value = fetchedTickets;
-    };
-
-    /**
-     * Create a new ticket and save it to the database.
-     */
-    const createTicket = async (ticket: Ticket): Promise<string | null> => {
-        return await $database.createTicket(ticket);
+    const getTickets = async (): Promise<Ticket[]> => {
+        return await $database.getTickets();
     };
 
     /**
@@ -32,10 +24,17 @@ export const useTicketService = () => {
         return await $database.getTicket(id);
     };
 
+    /**
+     * Create a new ticket and save it to the database.
+     */
+    const createTicket = async (ticket: Ticket): Promise<string | null> => {
+        return await $database.createTicket(ticket);
+    };
+
     return {
         tickets: computed(() => tickets.value),
-        setTickets,
-        createTicket,
+        getTickets,
         getTicketById,
+        createTicket,
     };
 }

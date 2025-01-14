@@ -12,9 +12,9 @@
                                 <div class="hidden md:block">
                                     <div class="ml-10 flex items-baseline space-x-4">
                                         <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                                        <NuxtLink to="cash-register" class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white" aria-current="page">Caisse</NuxtLink>
-                                        <NuxtLink to="tickets" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Tickets</NuxtLink>
-                                        <NuxtLink to="stock" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Stock</NuxtLink>
+                                        <NuxtLink to="/cash-register" class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white" aria-current="page">Caisse</NuxtLink>
+                                        <NuxtLink to="/tickets" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Tickets</NuxtLink>
+                                        <NuxtLink to="/stock" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Stock</NuxtLink>
                                     </div>
                                 </div>
                             </div>

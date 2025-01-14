@@ -4,7 +4,7 @@ export const useArticleService = () => {
     const { $database } = useNuxtApp();
 
     /**
-     * Return all the articles from the collection.
+     * Return all the articles from the database.
      */
     const getArticles = async (): Promise<Article[]> => {
         return await $database.getArticles();

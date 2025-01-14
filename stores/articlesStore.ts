@@ -5,12 +5,12 @@ import { useArticleService } from '~/composables/useArticleService';
 export const useArticlesStore = defineStore('articles', () => {
     const { getArticles, getArticle } = useArticleService();
 
-    // State
+    /// STATE ///
 
     // Cached articles from the database
     const articles = ref<Article[]>([]);
 
-    // Actions (methods)
+    /// ACTIONS ///
 
     /**
      * Fetch the articles from the database and store them.
