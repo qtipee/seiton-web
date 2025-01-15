@@ -11,10 +11,15 @@
                                 </div>
                                 <div class="hidden md:block">
                                     <div class="ml-10 flex items-baseline space-x-4">
-                                        <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                                        <NuxtLink to="/cash-register" class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white" aria-current="page">Caisse</NuxtLink>
-                                        <NuxtLink to="/tickets" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Tickets</NuxtLink>
-                                        <NuxtLink to="/stock" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Stock</NuxtLink>
+                                        <NuxtLink
+                                            v-for="(tab, index) in tabs"
+                                            :key="index"
+                                            :to="tab.to"
+                                            class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+                                            :class="[currentTab === tab.slug ? 'text-white bg-gray-700' : '']"
+                                        >
+                                            {{ tab.title }}
+                                        </NuxtLink>
                                     </div>
                                 </div>
                             </div>
@@ -109,3 +114,37 @@
         </div>
     </div>
 </template>
+
+<script setup lang="ts">
+// Tabs and current tab
+const currentTab = ref('');
+const tabs = [
+    {
+        title: 'Caisse',
+        icon: 'Icons',
+        to: '/cash-register',
+        slug: 'cash-register',
+    },
+    {
+        title: 'Tickets',
+        icon: 'Icons',
+        to: '/tickets',
+        slug: 'tickets',
+    },
+    {
+        title: 'Stock',
+        icon: 'Icons',
+        to: '/stock',
+        slug: 'stock',
+    },
+];
+
+watch(() => useRoute().path, (newPath) => {
+    // Set the current tab based on the url
+    const matchedTab = tabs.find((tab) => newPath.includes(tab.slug));
+
+    if (matchedTab) {
+        currentTab.value = matchedTab.slug;
+    }
+}, { immediate: true });
+</script>

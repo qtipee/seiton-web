@@ -123,9 +123,22 @@ export const useScannedArticlesStore = defineStore('scannedArticles', () => {
     };
 
     /**
+     * Select the given ticket.
+     * @param {number} index 
+     */
+    const selectActiveTicket = (index: number) => {
+        if (index >= 0 && index < ticketsOpen.length) {
+            activeTicketIndex.value = index;
+        }
+    };
+
+    /**
      * Add a new ticket in parallel.
      */
     const addNewTicket = () => {
+        // Max 6 tickets
+        if (ticketsOpen.length >= 6) return;
+
         ticketsOpen.push({
             scannedArticles: [],
             rawDiscount: 0.0,
@@ -133,6 +146,9 @@ export const useScannedArticlesStore = defineStore('scannedArticles', () => {
             totalPrice: 0.0,
             paymentMethod: PaymentMethod.UNDEFINED,
         });
+
+        // Select the latest ticket
+        activeTicketIndex.value = ticketsOpen.length - 1;
     };
 
     /**
@@ -236,10 +252,12 @@ export const useScannedArticlesStore = defineStore('scannedArticles', () => {
 
     return {
         validatedTicketId,
+        ticketsOpen,
         activeTicketIndex,
         currentTicket,
         addScannedArticle,
         updateArticleQuantity,
+        selectActiveTicket,
         addNewTicket,
         deleteCurrentTicket,
         validateTicket,

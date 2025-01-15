@@ -4,7 +4,6 @@
             <h1 class="text-2xl font-bold">
                 Tickets
             </h1>
-            <IconsEnvelope class="w-10 h-10 p-2 rounded-full text-white bg-blue-50" />
         </div>
     </header>
 

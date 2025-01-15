@@ -1,10 +1,21 @@
 <template>
     <header class="bg-white shadow">
         <div class="flex justify-between items-center mx-auto max-w-7xl px-4 py-2 sm:px-6 lg:px-8">
-            <h1 class="text-2xl font-bold">
+            <h1 class="flex-1 text-2xl font-bold">
                 Stock
             </h1>
-            <IconsPlus class="w-10 h-10 p-2 rounded-full text-white bg-green-500" @click="modalAddArticleOpen = true" />
+            <div class="flex flex-row-reverse items-center gap-4">
+                <!-- Add new article button -->
+                <button
+                    class="rounded bg-white py-1.5 px-3 text-left text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300"
+                    @click="modalAddArticleOpen = true"
+                >
+                    <span class="flex items-center space-x-1">
+                        <IconsPlus class="size-5 pt-0.5" />
+                        <span class="text-sm font-semibold">Ajouter Article</span>
+                    </span>
+                </button>
+            </div>
         </div>
     </header>
 
