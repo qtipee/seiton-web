@@ -1,5 +1,5 @@
 <template>
-    <div class="fixed inset-x-0 bottom-0">
+    <div class="fixed left-32 right-0 bottom-0">
         <!-- Global discounts and total price -->
         <div class="flex flex-col space-y-2 px-4 py-2 sm:px-6 lg:px-8">
 
