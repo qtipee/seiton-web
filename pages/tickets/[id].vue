@@ -5,7 +5,7 @@
             <h1 class="text-2xl font-bold">
                 Ticket <span class="text-xl font-semibold">#{{ ticketId }}</span>
             </h1>
-            <IconsEnvelope class="w-10 h-10 p-2 rounded-full text-white bg-blue-500" @click="sendByEmail" />
+            <IconsEnvelope class="w-10 h-10 p-2 rounded-full text-white bg-blue-500" @click="modalSendEmailOpen = true" />
         </div>
     </header>
 
@@ -76,7 +76,24 @@
             </div>
         </div>
 
-        <!-- TODO: add modal to send ticket by email -->
+        <!-- Modals -->
+        <!-- Send ticket by email modal -->
+        <Modal
+            v-model:open="modalSendEmailOpen"
+            title="Envoyer le Ticket par Email"
+            approve-text="Envoyer"
+            @accepted="sendByEmail"
+        >
+            <div class="flex flex-col space-y-4">
+                <p>
+                    Adresse email :
+                </p>
+                <input type="email" v-model="email" class="p-2 border rounded" />
+                <p class="italic text-gray-500">
+                    Cette opération peut prendre quelques minutes.
+                </p>
+            </div>
+        </Modal>
     </main>
 </template>
 
@@ -98,7 +115,32 @@ onMounted(async () => {
     }
 });
 
-const sendByEmail = () => {
-    // TODO
+const modalSendEmailOpen = ref(false);
+const email = ref("");
+
+/**
+ * Send the ticket by email if accepted.
+ * @param {boolean} accepted 
+ */
+const sendByEmail = async (accepted: boolean) => {
+    if (accepted && email.value && ticketId) {
+        const url = useRuntimeConfig().public.apiRoutes.sendTicketEmailUrl as string;
+
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: email.value,
+                    ticketId,
+                }),
+            });
+            console.log('RESPONSE:', response.status);
+        } catch (error) {
+            console.error(`HTTP error with API endpoint: ${url}`);
+        }
+    }
 };
 </script>
