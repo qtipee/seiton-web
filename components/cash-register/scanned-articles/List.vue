@@ -41,9 +41,14 @@
         @accepted="updateArticleQty"
     >
         <div class="flex flex-col space-y-4">
-            <p>
-                {{ `Quantité : ${articleQty}` }}
-            </p>
+            <!-- Article Quantity -->
+            <div class="flex flex-col space-y-2">
+                <label>
+                    {{ `Quantité : ${articleQty}` }}
+                </label>
+            </div>
+
+            <!-- -/+ Quantity Buttons -->
             <div class="flex space-x-4">
                 <IconsMinus
                     class="w-12 h-12 rounded-full text-white bg-red-500"

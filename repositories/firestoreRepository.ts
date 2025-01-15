@@ -25,7 +25,7 @@ export class FirestoreRepository implements DatabaseRepository {
         try {
             const querySnapshot = await getDocs(collection(this.db, 'articles'));
             const articleDoc = querySnapshot.docs.find((doc) => doc.data().articleID === articleID);
-            return articleDoc ? (articleDoc.data() as Article) : null;
+            return articleDoc ? ({ ...articleDoc.data(), id: articleDoc.id } as Article) : null;
         } catch (error) {
             console.error('Error fetching article by ID:', error);
             return null;

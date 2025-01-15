@@ -85,10 +85,14 @@
             @accepted="sendByEmail"
         >
             <div class="flex flex-col space-y-4">
-                <p>
-                    Adresse email :
-                </p>
-                <input type="email" v-model="email" class="p-2 border rounded" />
+                <!-- Email -->
+                <div class="flex flex-col space-y-2">
+                    <label for="email">
+                        Adresse email :
+                    </label>
+                    <input type="email" v-model="email" name="email" class="p-2 border rounded" />
+                </div>
+
                 <p class="italic text-gray-500">
                     Cette opération peut prendre quelques minutes.
                 </p>

@@ -80,14 +80,22 @@
         @accepted="validateDiscounts"
     >
         <div class="flex flex-col space-y-4">
-            <p>
-                Rabais en CHF :
-            </p>
-            <input type="number" v-model="rawDiscount" class="p-2 border rounded" />
-            <p>
-                Rabais en % :
-            </p>
-            <input type="number" v-model="percentageDiscount" class="p-2 border rounded" />
+            <!-- Raw Discount -->
+            <div class="flex flex-col space-y-2">
+                <label for="raw-discount">
+                    Rabais en CHF :
+                </label>
+                <input type="number" v-model="rawDiscount" name="raw-discount" class="p-2 border rounded" />
+            </div>
+
+            <!-- Percentage Discount -->
+            <div class="flex flex-col space-y-2">
+                <label for="percentage-discount">
+                    Rabais en % :
+                </label>
+                <input type="number" v-model="percentageDiscount" name="percentage-discount" class="p-2 border rounded" />
+            </div>
+            
             <p class="italic text-gray-500">
                 Ces rabais sont appliqués sur le total de tous les articles. Le rabais en % est appliqué après le rabais brut en CHF.
             </p>
@@ -102,14 +110,28 @@
         @accepted="validateCashPayment"
     >
         <div class="flex flex-col space-y-4">
-            <p>
-                Montant à payer : {{ scannedArticlesStore.currentTicket.totalPrice.toFixed(2) }} CHF
-            </p>
-            <p>Montant reçu :</p>
-            <input type="number" v-model="givenAmount" class="p-2 border rounded" />
-            <p>
-                Retour : {{ returnAmount.toFixed(2) }} CHF
-            </p>
+            <!-- Amount to pay -->
+            <div class="flex flex-col space-y-2">
+                <label>
+                    Montant à payer : {{ scannedArticlesStore.currentTicket.totalPrice.toFixed(2) }} CHF
+                </label>
+            </div>
+
+            <!-- Amount given -->
+            <div class="flex flex-col space-y-2">
+                <label for="given-amount">
+                    Montant reçu :
+                </label>
+                <input type="number" v-model="givenAmount" name="given-amount" class="p-2 border rounded" />
+            </div>
+
+            <!-- Amount to return -->
+            <div class="flex flex-col space-y-2">
+                <label>
+                    Retour : {{ returnAmount.toFixed(2) }} CHF
+                </label>
+            </div>
+
             <p class="italic text-gray-500">
                 Valider le paiement enregistre le ticket dans la base de donnée puis le supprime ici.
             </p>
@@ -124,9 +146,13 @@
         @accepted="validateTerminalPayment"
     >
         <div class="flex flex-col space-y-4">
-            <p>
-                Montant à payer : {{ scannedArticlesStore.currentTicket.totalPrice.toFixed(2) }} CHF
-            </p>
+            <!-- Amount to pay -->
+            <div class="flex flex-col space-y-2">
+                <label>
+                    Montant à payer : {{ scannedArticlesStore.currentTicket.totalPrice.toFixed(2) }} CHF
+                </label>
+            </div>
+
             <p class="italic text-gray-500">
                 Valider le paiement enregistre le ticket dans la base de donnée puis le supprime ici.
             </p>
@@ -142,13 +168,22 @@
         @update:open="resetAddArticleValues"
     >
         <div class="flex flex-col space-y-4">
-            <p>
-                ID de l'article :
-            </p>
-            <input v-model="articleId" class="p-2 border rounded" />
-            <p>
-                {{ `Quantité : ${articleQty}` }}
-            </p>
+            <!-- Article ID -->
+            <div class="flex flex-col space-y-2">
+                <label for="article-id">
+                    ID de l'article :
+                </label>
+                <input v-model="articleId" name="article-id" class="p-2 border rounded" />
+            </div>
+
+            <!-- Article Quantity -->
+            <div class="flex flex-col space-y-2">
+                <label for="article-quantity">
+                    {{ `Quantité : ${articleQty}` }}
+                </label>
+            </div>
+
+            <!-- -/+ Quantity Buttons -->
             <div class="flex space-x-4">
                 <IconsMinus
                     class="w-12 h-12 rounded-full text-white bg-red-500"
@@ -159,6 +194,7 @@
                     @click="updateArticleQty(1)"
                 />
             </div>
+            
             <p class="italic text-gray-500">
                 Permet d'ajouter manuellement un article au ticket si le scanneur pose problème.
             </p>
