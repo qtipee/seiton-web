@@ -56,7 +56,7 @@
                 <!-- Add article manually button -->
                 <button
                     class="flex-1 inline-flex items-center justify-center h-12 rounded text-white bg-green-500"
-                    @click="modalAddArticleOpen = true"
+                    @click="modalArticleAddOpen = true"
                 >
                     <IconsPlusCircle class="w-6 h-6" />
                 </button>
@@ -160,46 +160,10 @@
     </Modal>
 
     <!-- Manually add article -->
-    <Modal
-        v-model:open="modalAddArticleOpen"
-        title="Ajouter un Article"
-        approve-text="Ajouter"
-        @accepted="addArticle"
-        @update:open="resetAddArticleValues"
-    >
-        <div class="flex flex-col space-y-4">
-            <!-- Article ID -->
-            <div class="flex flex-col space-y-2">
-                <label for="article-id">
-                    ID de l'article :
-                </label>
-                <input v-model="articleId" name="article-id" class="p-2 border rounded" />
-            </div>
-
-            <!-- Article Quantity -->
-            <div class="flex flex-col space-y-2">
-                <label for="article-quantity">
-                    {{ `Quantité : ${articleQty}` }}
-                </label>
-            </div>
-
-            <!-- -/+ Quantity Buttons -->
-            <div class="flex space-x-4">
-                <IconsMinus
-                    class="w-12 h-12 rounded-full text-white bg-red-500"
-                    @click="updateArticleQty(-1)"
-                />
-                <IconsPlus
-                    class="w-12 h-12 rounded-full text-white bg-green-500"
-                    @click="updateArticleQty(1)"
-                />
-            </div>
-            
-            <p class="italic text-gray-500">
-                Permet d'ajouter manuellement un article au ticket si le scanneur pose problème.
-            </p>
-        </div>
-    </Modal>
+    <ModalArticleAdd
+        :open="modalArticleAddOpen"
+        @update:open="modalArticleAddOpen = $event"
+    />
 
     <!-- Delete ticket modal -->
     <Modal
@@ -213,6 +177,13 @@
             Il sera impossible de récupérer ce ticket après suppression.
         </p>
     </Modal>
+
+    <!-- Send ticket by email modal -->
+    <ModalTicketSendEmail
+        :open="modalSendEmailOpen"
+        :ticketId="scannedArticlesStore.validatedTicketId"
+        @update:open="modalSendEmailOpen = $event"
+    />
 </template>
 
 <script setup lang="ts">
@@ -222,13 +193,12 @@ import { useScannedArticlesStore } from '~/stores/scannedArticlesStore';
 
 const scannedArticlesStore = useScannedArticlesStore();
 
-// TODO: remove, for testing
-scannedArticlesStore.recalculateTotal();
-
 const modalDiscountsOpen = ref(false);
 const modalCashPaymentOpen = ref(false);
 const modalTerminalPaymentOpen = ref(false);
+const modalArticleAddOpen = ref(false);
 const modalDeleteTicketOpen = ref(false);
+const modalSendEmailOpen = ref(false);
 
 /// GLOBAL DISCOUNTS ///
 const rawDiscount = ref(0.0);
@@ -260,6 +230,7 @@ const validateCashPayment = (accepted: boolean) => {
     if (accepted) {
         scannedArticlesStore.setPaymentMethod(PaymentMethod.CASH);
         scannedArticlesStore.validateTicket();
+        modalSendEmailOpen.value = true;
     }
 };
 
@@ -268,42 +239,9 @@ const validateTerminalPayment = (accepted: boolean) => {
     if (accepted) {
         scannedArticlesStore.setPaymentMethod(PaymentMethod.TERMINAL);
         scannedArticlesStore.validateTicket();
+        modalSendEmailOpen.value = true;
     }
 };
-
-/// MANUALLY ADD ARTICLE ///
-const modalAddArticleOpen = ref(false);
-const articleId = ref("");
-const articleQty = ref(1);
-
-/**
- * Update the article's quantity.
- * @param {number} qty 
- */
-const updateArticleQty = (qty: number) => {
-    articleQty.value += qty;
-    if (articleQty.value < 1) {
-        articleQty.value = 1;
-    }
-};
-
-/**
- * Manually add an article to the ticket if accepted.
- * @param {boolean} accepted
- */
-const addArticle = (accepted: boolean) => {
-    if (accepted) {
-        scannedArticlesStore.addScannedArticle(articleId.value, articleQty.value);
-    }
-};
-
-/**
- * Reset the values when the Add Article modal closes.
- */
-const resetAddArticleValues = () => {
-    articleId.value = "";
-    articleQty.value = 0;
-}
 
 /// DELETE TICKET ///
 const deleteTicket = (accepted: boolean) => {

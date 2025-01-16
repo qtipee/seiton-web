@@ -40,7 +40,7 @@
                     ID de l'article :
                 </label>
                 <div class="flex justify-between items-center space-x-4">
-                    <input v-model="articleId" name="article-id" class="flex-1 p-2 border rounded" @keyup.enter="searchArticle" />
+                    <input v-model="articleID" name="article-id" class="flex-1 p-2 border rounded" @keyup.enter="searchArticle" />
                     <IconsMagnifyingGlass class="w-6 h-6 text-blue-500" @click="searchArticle" />
                 </div>
             </div>
@@ -89,9 +89,9 @@ import type { Article } from '~/interfaces/article';
 
 const modalAddArticleOpen = ref(false);
 
-const articleId = ref("");
+const articleID = ref("");
 const article = ref<Article>({
-    articleId: '',
+    articleID: '',
     discount: 0,
     name: '',
     quantity: 0,
@@ -107,8 +107,8 @@ const disabled = ref(true);
  * update the article in the database.
  */
 const searchArticle = async () => {
-    const _article = await useArticlesStore().getArticleById(articleId.value);
-    article.value = _article ?? { articleId: '', discount: 0, name: '', quantity: 0, unitPrice: 0 };
+    const _article = await useArticlesStore().getArticleById(articleID.value);
+    article.value = _article ?? { articleID: '', discount: 0, name: '', quantity: 0, unitPrice: 0 };
     disabled.value = false;
 };
 
@@ -117,13 +117,13 @@ const searchArticle = async () => {
  * @param {boolean} accepted 
  */
 const addUpdateArticle = async (accepted: boolean) => {
-    if (accepted && articleId.value && article.value) {
+    if (accepted && articleID.value && article.value) {
         if (article.value.id) {
             // Article already exists, update it
             await useArticleService().updateArticle(article.value.id, article.value);
         } else {
             // Article does not exist yet, create it
-            article.value.articleId = articleId.value;
+            article.value.articleID = articleID.value;
             await useArticleService().addArticle(article.value);
         }
 
@@ -135,11 +135,11 @@ const addUpdateArticle = async (accepted: boolean) => {
  * Reset the form fields.
  */
 const resetForm = () => {
-    articleId.value = '';
-    article.value = { articleId: '', discount: 0, name: '', quantity: 0, unitPrice: 0 };
+    articleID.value = '';
+    article.value = { articleID: '', discount: 0, name: '', quantity: 0, unitPrice: 0 };
 };
 
-watch(() => articleId.value, () => {
+watch(() => articleID.value, () => {
     // Disable the form when the article ID is modified
     // to avoid a wrong ID or wrong article data
     disabled.value = true;

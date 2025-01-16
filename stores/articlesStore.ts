@@ -26,24 +26,24 @@ export const useArticlesStore = defineStore('articles', () => {
      * Return the article associated to the given article ID if
      * it exists. It first tries to get it from the local cache,
      * otherwise it will fetch it from the database.
-     * @param articleId {string}
+     * @param articleID {string}
      * @returns {Promise<Article | null>}
      */
-    const getArticleById = async (articleId: string): Promise<Article | null> => {
-        if (!articleId) {
+    const getArticleById = async (articleID: string): Promise<Article | null> => {
+        if (!articleID) {
             return null;
         }
 
         // Return the article from the cache if present
         const cachedArticle = articles.value.find(
-            (article) => article.articleId === articleId
+            (article) => article.articleID === articleID
         );
         if (cachedArticle) {
             return cachedArticle;
         }
 
         // Otherwise, try to fetch the article from the database
-        return await getArticle(articleId);
+        return await getArticle(articleID);
     };
 
     return {

@@ -1,6 +1,6 @@
 export enum PaymentMethod {
-    CASH,
-    TERMINAL,
-    VOUCHER,
-    UNDEFINED,
+    CASH = 'CASH',
+    TERMINAL = 'TERMINAL',
+    VOUCHER = 'VOUCHER',
+    UNDEFINED = 'UNDEFINED',
 }

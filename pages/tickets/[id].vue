@@ -36,7 +36,7 @@
                     </div>
                 </div>
 
-                <div class="fixed inset-x-0 bottom-0">
+                <div class="fixed left-32 right-0 bottom-0">
                     <!-- Global discounts and total price -->
                     <div class="flex flex-col space-y-2 px-4 py-2 sm:px-6 lg:px-8">
 
@@ -78,26 +78,11 @@
 
         <!-- Modals -->
         <!-- Send ticket by email modal -->
-        <Modal
-            v-model:open="modalSendEmailOpen"
-            title="Envoyer le Ticket par Email"
-            approve-text="Envoyer"
-            @accepted="sendByEmail"
-        >
-            <div class="flex flex-col space-y-4">
-                <!-- Email -->
-                <div class="flex flex-col space-y-2">
-                    <label for="email">
-                        Adresse email :
-                    </label>
-                    <input type="email" v-model="email" name="email" class="p-2 border rounded" />
-                </div>
-
-                <p class="italic text-gray-500">
-                    Cette opération peut prendre quelques minutes.
-                </p>
-            </div>
-        </Modal>
+        <ModalTicketSendEmail
+            :open="modalSendEmailOpen"
+            :ticketId="ticketId"
+            @update:open="modalSendEmailOpen = $event"
+        />
     </main>
 </template>
 
@@ -107,6 +92,8 @@ import type { Ticket } from '~/interfaces/ticket';
 const route = useRoute();
 const ticketId = Array.isArray(route.params.id) ? route.params.id[0] : route.params.id;
 const ticket = ref<Ticket | null>(null);
+
+const modalSendEmailOpen = ref(false);
 
 onMounted(async () => {
     if (ticketId) {
@@ -118,33 +105,4 @@ onMounted(async () => {
         }
     }
 });
-
-const modalSendEmailOpen = ref(false);
-const email = ref("");
-
-/**
- * Send the ticket by email if accepted.
- * @param {boolean} accepted 
- */
-const sendByEmail = async (accepted: boolean) => {
-    if (accepted && email.value && ticketId) {
-        const url = useRuntimeConfig().public.apiRoutes.sendTicketEmailUrl as string;
-
-        try {
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    email: email.value,
-                    ticketId,
-                }),
-            });
-            console.log('RESPONSE:', response.status);
-        } catch (error) {
-            console.error(`HTTP error with API endpoint: ${url}`);
-        }
-    }
-};
 </script>

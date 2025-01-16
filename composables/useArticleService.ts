@@ -13,8 +13,8 @@ export const useArticleService = () => {
     /**
      * Return the article associated with the given ID if it exists.
      */
-    const getArticle = async (articleId: string): Promise<Article | null> => {
-        return await $database.getArticleById(articleId);
+    const getArticle = async (articleID: string): Promise<Article | null> => {
+        return await $database.getArticleById(articleID);
     };
 
     /**

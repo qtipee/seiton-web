@@ -19,42 +19,16 @@ export const useScannedArticlesStore = defineStore('scannedArticles', () => {
     /// STATE ///
 
     // Latest validated ticket id
-    const validatedTicketId = ref<string | null>(null);
+    const validatedTicketId = ref<string>('');
 
     // List of tickets in creation
-    const ticketsOpen = reactive<Ticket[]>([
-        {
-            // TODO: for testing UI
-            scannedArticles: [
-                {
-                    article: {
-                        id: "1",
-                        articleId: "123456789",
-                        name: "Thé Matcha",
-                        discount: 0.0,
-                        unitPrice: 9.9,
-                        quantity: 99999,
-                    },
-                    quantity: 9,
-                },
-                {
-                    article: {
-                        id: "2",
-                        articleId: "123456780",
-                        name: "Thé Sensha",
-                        discount: 0.5,
-                        unitPrice: 9.9,
-                        quantity: 99999,
-                    },
-                    quantity: 7,
-                },
-            ],
-            rawDiscount: 0.0,
-            percentageDiscount: 0.0,
-            totalPrice: 0.0,
-            paymentMethod: PaymentMethod.UNDEFINED,
-        },
-    ]);
+    const ticketsOpen = reactive<Ticket[]>([{
+        scannedArticles: [],
+        paymentMethod: PaymentMethod.UNDEFINED,
+        percentageDiscount: 0.0,
+        rawDiscount: 0.0,
+        totalPrice: 0.0,
+    }]);
     
     // Selected ticket index
     const activeTicketIndex = ref(0);
@@ -68,15 +42,15 @@ export const useScannedArticlesStore = defineStore('scannedArticles', () => {
 
     /**
      * Add an article to the selected ticket.
-     * @param {string} articleId
+     * @param {string} articleID
      * @param {number} quantity 
      */
-    const addScannedArticle = async (articleId: string, quantity: number) => {
-        if (!articleId) return;
+    const addScannedArticle = async (articleID: string, quantity: number) => {
+        if (!articleID) return;
 
         const current = currentTicket.value;
         const index = current.scannedArticles.findIndex(
-            (scannedItem) => scannedItem.article.articleId === articleId
+            (scannedItem) => scannedItem.article.articleID === articleID
         );
 
         if (index !== -1) {
@@ -84,13 +58,13 @@ export const useScannedArticlesStore = defineStore('scannedArticles', () => {
             current.scannedArticles[index].quantity += quantity;
         } else {
             // The ticket does not contain the article yet: add it
-            const article = await articlesStore.getArticleById(articleId);
+            const article = await articlesStore.getArticleById(articleID);
 
             if (article) {
                 const scannedArticle: ScannedArticle = {  article, quantity, };
                 current.scannedArticles.push(scannedArticle);
             } else {
-                console.error(`Article not found: ${articleId}`);
+                console.error(`Article not found: ${articleID}`);
             }
         }
 
@@ -100,13 +74,13 @@ export const useScannedArticlesStore = defineStore('scannedArticles', () => {
     /**
      * Update an article's quantity. If the quantity is set to 0,
      * it will remove the article from the list.
-     * @param {string} articleId 
+     * @param {string} articleID 
      * @param {number} quantity 
      */
-    const updateArticleQuantity = (articleId: string, quantity: number) => {
+    const updateArticleQuantity = (articleID: string, quantity: number) => {
         const current = currentTicket.value;
         const index = current.scannedArticles.findIndex(
-            (scanned) => scanned.article.articleId === articleId
+            (scanned) => scanned.article.articleID === articleID
         );
 
         if (index !== -1) {
@@ -186,7 +160,7 @@ export const useScannedArticlesStore = defineStore('scannedArticles', () => {
 
         // Create the ticket in the database
         const ticketId = await createTicket(currentTicket.value);
-        validatedTicketId.value = ticketId;
+        validatedTicketId.value = ticketId ?? '';
 
         // Delete the ticket
         deleteCurrentTicket();
@@ -263,7 +237,5 @@ export const useScannedArticlesStore = defineStore('scannedArticles', () => {
         validateTicket,
         updateDiscounts,
         setPaymentMethod,
-        // TODO: remove, for testing
-        recalculateTotal,
     };
 });

@@ -93,7 +93,7 @@ const setArticleQty = (qty: number) => {
  */
 const updateArticleQty = (accepted: boolean) => {
     if (accepted && articleToUpdate.value) {
-        scannedArticlesStore.updateArticleQuantity(articleToUpdate.value.articleId, articleQty.value);
+        scannedArticlesStore.updateArticleQuantity(articleToUpdate.value.articleID, articleQty.value);
     }
 };
 </script>

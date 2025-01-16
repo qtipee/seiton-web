@@ -1,6 +1,6 @@
 export interface Article {
     id?: string,
-    articleId: string,
+    articleID: string,
     discount?: number,
     name: string,
     quantity: number,

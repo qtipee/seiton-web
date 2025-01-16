@@ -19,8 +19,8 @@ export class DatabaseService {
         return await this.database.getArticles();
     }
     
-    async getArticleById(articleId: string): Promise<Article | null> {
-        return await this.database.getArticleById(articleId);
+    async getArticleById(articleID: string): Promise<Article | null> {
+        return await this.database.getArticleById(articleID);
     }
     
     async createArticle(article: Article): Promise<string | null> {

@@ -1,7 +1,7 @@
 <template>
     <div class="h-full bg-gray-100">
-        <div class="flex h-full">
-            <nav class="bg-gray-800 w-32 flex flex-col min-h-screen h-full">
+        <div class="relative h-full">
+            <nav class="fixed left-0 inset-y-0 w-32 bg-gray-800">
                 <div class="flex flex-col h-full">
                     <NuxtLink
                         v-for="(tab, index) in tabs"
@@ -17,7 +17,7 @@
             </nav>
 
             <!-- Page Content -->
-            <div class="flex-1">
+            <div class="pl-32">
                 <NuxtPage />
             </div>
         </div>

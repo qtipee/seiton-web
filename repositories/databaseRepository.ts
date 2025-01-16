@@ -8,7 +8,7 @@ import type { Ticket } from '~/interfaces/ticket';
 export interface DatabaseRepository {
     // ARTICLES
     getArticles(): Promise<Article[]>;
-    getArticleById(articleId: string): Promise<Article | null>;
+    getArticleById(articleID: string): Promise<Article | null>;
     createArticle(article: Article): Promise<string | null>;
     updateArticle(documentId: string, article: Article): Promise<boolean>;
     updateArticlesQuantity(articles: Article[]): Promise<void>;
