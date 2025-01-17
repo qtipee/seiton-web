@@ -1,4 +1,5 @@
 import type { Timestamp } from 'firebase/firestore';
+import type { Sound } from '~/enums/sound';
 
 /**
  * Convert the given Firestore Timestamp to the locale
@@ -26,4 +27,17 @@ export const formatTimestamp = (timestamp: Timestamp, includeTime: boolean = fal
  */
 export const formatDate = (date: Date): string => {
     return new Intl.DateTimeFormat('fr-FR').format(date);
+};
+
+/**
+ * Play the given sound.
+ * @param {Sound} sound name of the sound file
+ */
+export const playSound = (sound: Sound): void => {
+    try {
+        const audio = new Audio(`/sounds/${sound}`);
+        audio.play();
+    } catch (error) {
+        console.error(`Error playing sound:`, error);
+    }
 };
