@@ -18,20 +18,14 @@ export const useScannedArticlesStore = defineStore('scannedArticles', () => {
 
     /// STATE ///
 
-    // Latest validated ticket id
-    const validatedTicketId = ref<string>('');
-
     // List of tickets in creation
-    const ticketsOpen = reactive<Ticket[]>([{
-        scannedArticles: [],
-        paymentMethod: PaymentMethod.UNDEFINED,
-        percentageDiscount: 0.0,
-        rawDiscount: 0.0,
-        totalPrice: 0.0,
-    }]);
+    const ticketsOpen = reactive<Ticket[]>(JSON.parse(localStorage.getItem('ticketsOpen') || '[]'));
     
     // Selected ticket index
-    const activeTicketIndex = ref(0);
+    const activeTicketIndex = ref(parseInt(localStorage.getItem('activeTicketIndex') || '0'));
+
+    // Latest validated ticket id
+    const validatedTicketId = ref<string>('');
 
     /// GETTERS ///
 
@@ -103,6 +97,7 @@ export const useScannedArticlesStore = defineStore('scannedArticles', () => {
     const selectActiveTicket = (index: number) => {
         if (index >= 0 && index < ticketsOpen.length) {
             activeTicketIndex.value = index;
+            localStorage.setItem('activeTicketIndex', String(activeTicketIndex.value));
         }
     };
 
@@ -144,6 +139,8 @@ export const useScannedArticlesStore = defineStore('scannedArticles', () => {
             };
             activeTicketIndex.value = 0;
         }
+
+        saveToLocalStorage();
     };
 
     /**
@@ -205,6 +202,15 @@ export const useScannedArticlesStore = defineStore('scannedArticles', () => {
         total *= 1 - current.percentageDiscount / 100;
 
         current.totalPrice = Math.max(total, 0.0);
+
+        saveToLocalStorage();
+    };
+
+    /**
+     * Save ticketsOpen list to local storage.
+     */
+    const saveToLocalStorage = () => {
+        localStorage.setItem('ticketsOpen', JSON.stringify(ticketsOpen));
     };
 
     // Watchers
@@ -223,6 +229,9 @@ export const useScannedArticlesStore = defineStore('scannedArticles', () => {
         { deep: true }
     );
     */
+
+    // Initialise the store with an empty ticket
+    ticketsOpen.length === 0 && addNewTicket();
 
     return {
         validatedTicketId,
