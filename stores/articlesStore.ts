@@ -3,12 +3,12 @@ import type { Article } from '~/interfaces/article';
 import { useArticleService } from '~/composables/useArticleService';
 
 export const useArticlesStore = defineStore('articles', () => {
-    const { getArticles, getArticle, subscribeToArticles } = useArticleService();
+    const { getArticle, subscribeToArticles } = useArticleService();
 
     /// STATE ///
 
     // Cached articles from the database
-    const articles = ref<Article[]>([]);
+    const articles = ref<Article[]>(JSON.parse(localStorage.getItem('articles') || '[]'));
 
     /// ACTIONS ///
 
@@ -18,9 +18,20 @@ export const useArticlesStore = defineStore('articles', () => {
      * reset the articles in the local cache.
      */
     const initArticles = async () => {
-        const fetchedArticles = await getArticles();
-        articles.value = fetchedArticles;
+        // Listen for changes in the articles collection
+        // Subscribing to this event will fetch the data
+        subscribeToArticles((_articles) => {
+            articles.value = _articles;
+            saveToLocalStorage();
+        });
     }
+
+    /**
+     * Save articles collection to local storage.
+     */
+    const saveToLocalStorage = () => {
+        localStorage.setItem('articles', JSON.stringify(articles.value));
+    };
 
     /**
      * Return the article associated to the given article ID if
@@ -45,11 +56,6 @@ export const useArticlesStore = defineStore('articles', () => {
         // Otherwise, try to fetch the article from the database
         return await getArticle(articleID);
     };
-
-    // Listen for changes in the articles collection
-    const unsubscribeArticles = subscribeToArticles((_articles) => {
-        articles.value = _articles;
-    });
 
     return {
         articles: computed(() => articles.value),

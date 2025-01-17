@@ -3,12 +3,12 @@ import type { Ticket } from '~/interfaces/ticket';
 import { useTicketService } from '~/composables/useTicketService';
 
 export const useTicketsStore = defineStore('tickets', () => {
-    const { getTickets, subscribeToTickets } = useTicketService();
+    const { subscribeToTickets } = useTicketService();
 
     /// STATE ///
 
     // Cached tickets from the database
-    const tickets = ref<Ticket[]>([]);
+    const tickets = ref<Ticket[]>(JSON.parse(localStorage.getItem('tickets') || '[]'));
 
     /// GETTERS ///
 
@@ -58,14 +58,20 @@ export const useTicketsStore = defineStore('tickets', () => {
      * reset the tickets in the local cache.
      */
     const initTickets = async() => {
-        const fetchedTickets = await getTickets();
-        tickets.value = fetchedTickets;
+        // Listen for changes in the tickets collection
+        // Subscribing to this event will fetch the data
+        subscribeToTickets((_tickets) => {
+            tickets.value = _tickets;
+            saveToLocalStorage();
+        });
     };
 
-    // Listen for changes in the tickets collection
-    const unsubscribeTickets = subscribeToTickets((_tickets) => {
-        tickets.value = _tickets;
-    });
+    /**
+     * Save tickets collection to local storage.
+     */
+    const saveToLocalStorage = () => {
+        localStorage.setItem('tickets', JSON.stringify(tickets.value));
+    };
 
     return {
         tickets: computed(() => tickets.value),
