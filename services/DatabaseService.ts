@@ -34,6 +34,10 @@ export class DatabaseService {
     async updateArticlesQuantity(articles: Article[]): Promise<void> {
         await this.database.updateArticlesQuantity(articles);
     }
+
+    subscribeToArticles(callback: (articles: Article[]) => void): void {
+        this.database.subscribeToArticles(callback);
+    }
     
     // TICKETS
     
@@ -47,5 +51,9 @@ export class DatabaseService {
     
     async getTicket(id: string): Promise<Ticket | null> {
         return await this.database.getTicket(id);
+    }
+
+    subscribeToTickets(callback: (tickets: Ticket[]) => void): void {
+        this.database.subscribeToTickets(callback);
     }
 }

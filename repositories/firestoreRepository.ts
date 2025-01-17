@@ -1,4 +1,4 @@
-import { getFirestore, collection, getDocs, addDoc, doc, getDoc, updateDoc, runTransaction, serverTimestamp } from 'firebase/firestore';
+import { getFirestore, collection, getDocs, addDoc, doc, getDoc, updateDoc, runTransaction, serverTimestamp, onSnapshot } from 'firebase/firestore';
 import type { DatabaseRepository } from '~/repositories/databaseRepository';
 import type { Article } from '~/interfaces/article';
 import type { Ticket } from '~/interfaces/ticket';
@@ -69,6 +69,20 @@ export class FirestoreRepository implements DatabaseRepository {
             console.error('Error updating articles quantity:', error);
         }
     }
+
+    subscribeToArticles(callback: (articles: Article[]) => void): () => void {
+        const articlesRef = collection(this.db, 'articles');
+        const unsubscribe = onSnapshot(articlesRef, (snapshot) => {
+            const articles = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id } as Article));
+            // Notify the store with updated data
+            callback(articles);
+        }, (error) => {
+            console.error('Error listening to articles:', error);
+        });
+
+         // Return a function to stop listening
+        return unsubscribe;
+    }
     
     /// TICKETS ///
     
@@ -104,5 +118,19 @@ export class FirestoreRepository implements DatabaseRepository {
             console.error('Error fetching ticket:', error);
             return null;
         }
+    }
+
+    subscribeToTickets(callback: (tickets: Ticket[]) => void): () => void {
+        const ticketsRef = collection(this.db, 'tickets');
+        const unsubscribe = onSnapshot(ticketsRef, (snapshot) => {
+            const tickets = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id } as Ticket));
+            // Notify the store with updated data
+            callback(tickets);
+        }, (error) => {
+            console.error('Error listening to tickets:', error);
+        });
+
+        // Return a function to stop listening
+        return unsubscribe;
     }
 }

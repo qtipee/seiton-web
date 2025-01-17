@@ -3,7 +3,7 @@ import type { Article } from '~/interfaces/article';
 import { useArticleService } from '~/composables/useArticleService';
 
 export const useArticlesStore = defineStore('articles', () => {
-    const { getArticles, getArticle } = useArticleService();
+    const { getArticles, getArticle, subscribeToArticles } = useArticleService();
 
     /// STATE ///
 
@@ -45,6 +45,11 @@ export const useArticlesStore = defineStore('articles', () => {
         // Otherwise, try to fetch the article from the database
         return await getArticle(articleID);
     };
+
+    // Listen for changes in the articles collection
+    const unsubscribeArticles = subscribeToArticles((_articles) => {
+        articles.value = _articles;
+    });
 
     return {
         articles: computed(() => articles.value),

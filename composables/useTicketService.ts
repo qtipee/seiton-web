@@ -31,10 +31,19 @@ export const useTicketService = () => {
         return await $database.createTicket(ticket);
     };
 
+    /**
+     * Listen for changes in the tickets collection.
+     * @param {((tickets: Ticket[]) => void)} callback
+     */
+    const subscribeToTickets = (callback: (tickets: Ticket[]) => void): void => {
+        return $database.subscribeToTickets(callback);
+    }
+
     return {
         tickets: computed(() => tickets.value),
         getTickets,
         getTicketById,
         createTicket,
+        subscribeToTickets,
     };
 }

@@ -3,7 +3,7 @@ import type { Ticket } from '~/interfaces/ticket';
 import { useTicketService } from '~/composables/useTicketService';
 
 export const useTicketsStore = defineStore('tickets', () => {
-    const { getTickets } = useTicketService();
+    const { getTickets, subscribeToTickets } = useTicketService();
 
     /// STATE ///
 
@@ -61,6 +61,11 @@ export const useTicketsStore = defineStore('tickets', () => {
         const fetchedTickets = await getTickets();
         tickets.value = fetchedTickets;
     };
+
+    // Listen for changes in the tickets collection
+    const unsubscribeTickets = subscribeToTickets((_tickets) => {
+        tickets.value = _tickets;
+    });
 
     return {
         tickets: computed(() => tickets.value),

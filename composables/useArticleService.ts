@@ -43,11 +43,20 @@ export const useArticleService = () => {
         await $database.updateArticlesQuantity(updatedArticles);
     };
 
+    /**
+     * Listen for changes in the articles collection.
+     * @param {((articles: Article[]) => void)} callback
+     */
+    const subscribeToArticles = (callback: (articles: Article[]) => void): void => {
+        return $database.subscribeToArticles(callback);
+    };
+
     return {
         getArticles,
         getArticle,
         addArticle,
         updateArticle,
         updateArticlesQuantity,
+        subscribeToArticles,
     };
 }
