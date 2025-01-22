@@ -17,7 +17,7 @@ export const useArticlesStore = defineStore('articles', () => {
      * Call this method when the app initialises or to
      * reset the articles in the local cache.
      */
-    const initArticles = async () => {
+    const init = async () => {
         // Listen for changes in the articles collection
         // Subscribing to this event will fetch the data
         subscribeToArticles((_articles) => {
@@ -59,7 +59,7 @@ export const useArticlesStore = defineStore('articles', () => {
 
     return {
         articles: computed(() => articles.value),
-        initArticles,
         getArticleById,
+        init,
     };
 });

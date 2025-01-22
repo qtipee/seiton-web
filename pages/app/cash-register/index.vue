@@ -13,14 +13,3 @@
         </div>
     </main>
 </template>
-
-<script setup lang="ts">
-import { useScannedArticlesStore } from '~/stores/scannedArticlesStore';
-
-const scannedArticlesStore = useScannedArticlesStore();
-
-/// NEW TICKET ///
-const addNewTicket = () => {
-    scannedArticlesStore.addNewTicket();
-};
-</script>

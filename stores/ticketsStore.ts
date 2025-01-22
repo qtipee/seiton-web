@@ -57,7 +57,7 @@ export const useTicketsStore = defineStore('tickets', () => {
      * Call this method when the app initialises or to
      * reset the tickets in the local cache.
      */
-    const initTickets = async() => {
+    const init = async() => {
         // Listen for changes in the tickets collection
         // Subscribing to this event will fetch the data
         subscribeToTickets((_tickets) => {
@@ -76,6 +76,6 @@ export const useTicketsStore = defineStore('tickets', () => {
     return {
         tickets: computed(() => tickets.value),
         sortedTickets,
-        initTickets,
+        init,
     };
 });
