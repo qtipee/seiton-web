@@ -11,7 +11,7 @@
             <NuxtLink
                 v-for="(ticket, _index) in ticketsGroup"
                 :key="_index"
-                :to="`/tickets/${ticket.id}`"
+                :to="`/app/tickets/${ticket.id}`"
                 :class="['flex items-center justify-between px-4 py-2 sm:px-6 lg:px-8', _index % 2 === 0 ? 'bg-white' : 'bg-gray-100']"
             >
                 <p v-if="ticket.datetime">

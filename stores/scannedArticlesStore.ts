@@ -19,10 +19,10 @@ export const useScannedArticlesStore = defineStore('scannedArticles', () => {
     /// STATE ///
 
     // List of tickets in creation
-    const ticketsOpen = reactive<Ticket[]>(JSON.parse(localStorage.getItem('ticketsOpen') || '[]'));
+    let ticketsOpen = reactive<Ticket[]>([]);
     
     // Selected ticket index
-    const activeTicketIndex = ref(parseInt(localStorage.getItem('activeTicketIndex') || '0'));
+    const activeTicketIndex = ref(0);
 
     // Latest validated ticket id
     const validatedTicketId = ref<string>('');
@@ -213,6 +213,30 @@ export const useScannedArticlesStore = defineStore('scannedArticles', () => {
         localStorage.setItem('ticketsOpen', JSON.stringify(ticketsOpen));
     };
 
+    /**
+     * Initialise the store.
+     */
+    const init = () => {
+        // Try to retrieve tickets from local storage
+        const storedTickets = JSON.parse(localStorage.getItem('ticketsOpen') || '[]');
+
+        if (storedTickets.length === 0) {
+            // Ensure at least one ticket exists
+            ticketsOpen = [{ 
+                scannedArticles: [], 
+                rawDiscount: 0.0, 
+                percentageDiscount: 0.0, 
+                totalPrice: 0.0, 
+                paymentMethod: PaymentMethod.UNDEFINED 
+            }];
+        } else {
+            ticketsOpen = storedTickets;
+        }
+
+        // Try to retrieve active ticket index from local storage
+        activeTicketIndex.value = parseInt(localStorage.getItem('activeTicketIndex') || '0');
+    };
+
     // Watchers
     /*
     watch(
@@ -230,9 +254,6 @@ export const useScannedArticlesStore = defineStore('scannedArticles', () => {
     );
     */
 
-    // Initialise the store with an empty ticket
-    ticketsOpen.length === 0 && addNewTicket();
-
     return {
         validatedTicketId,
         ticketsOpen,
@@ -246,5 +267,6 @@ export const useScannedArticlesStore = defineStore('scannedArticles', () => {
         validateTicket,
         updateDiscounts,
         setPaymentMethod,
+        init,
     };
 });
