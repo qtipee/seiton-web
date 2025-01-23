@@ -44,8 +44,6 @@ jobs:
           release_name: "Release ${{ github.ref_name }}"
           draft: false
           prerelease: false
-          generate_release_notes: true
-          token: ${{ secrets.GITHUB_TOKEN }}
 
       # Upload the compressed static files as an asset to the release
       - name: Upload Release Asset
