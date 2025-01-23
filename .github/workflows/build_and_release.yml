@@ -44,5 +44,5 @@ jobs:
         run: |
           gh release create "$tag" seiton-web.zip \
             --repo="$GITHUB_REPOSITORY" \
-            --title="${GITHUB_REPOSITORY#*} ${tag#v}" \
+            --title="seiton-web ${tag#v}" \
             --generate-notes
