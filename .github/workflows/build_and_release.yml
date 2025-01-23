@@ -5,6 +5,9 @@ on:
     tags:
       - 'v*' # Triggers when any new tag is pushed
 
+permissions:
+  contents: write
+
 jobs:
   build-and-release:
     name: Build and Attach App to Release
