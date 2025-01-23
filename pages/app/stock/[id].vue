@@ -17,7 +17,7 @@
                     </label>
                     <div class="flex justify-between items-center space-x-4">
                         <input v-model="articleID" name="article-id" class="flex-1 p-2 border rounded" @keyup.enter="searchArticle" />
-                        <IconsMagnifyingGlass class="w-6 h-6 text-blue-500" @click="searchArticle" />
+                        <IconsMagnifyingGlass class="w-6 h-6 text-primary-500" @click="searchArticle" />
                     </div>
                 </div>
                 
@@ -55,7 +55,7 @@
 
                 <!-- Save Button -->
                 <button
-                    class="inline-flex items-center justify-center h-12 rounded text-white bg-blue-500"
+                    class="inline-flex items-center justify-center py-3 px-4 font-semibold rounded text-white bg-primary-500 hover:bg-primary-700 duration-200"
                     @click="addUpdateArticle"
                     :disabled="disabled"
                 >

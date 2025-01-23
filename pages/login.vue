@@ -14,7 +14,7 @@
                     id="email"
                     v-model="email"
                     required
-                    class="mt-2 p-3 w-full border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                    class="mt-2 p-3 w-full border border-gray-300 rounded focus:ring-2 focus:ring-primary-500"
                     placeholder="you@example.com"
                     />
                 </div>
@@ -27,13 +27,13 @@
                         id="password"
                         v-model="password"
                         required
-                        class="mt-2 p-3 w-full border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                        class="mt-2 p-3 w-full border border-gray-300 rounded focus:ring-2 focus:ring-primary-500"
                         placeholder="********"
                     />
                 </div>
                 <button
                     type="submit"
-                    class="w-full py-3 px-4 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition-colors duration-200"
+                    class="w-full py-3 px-4font-semibold rounded text-white bg-primary-500 hover:bg-primary-700 duration-200"
                     >
                         Se connecter
                 </button>

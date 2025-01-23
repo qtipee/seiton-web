@@ -14,7 +14,7 @@
                 <form @submit.prevent="handleLogout">
                     <button
                         type="submit"
-                        class="py-3 px-4 bg-red-600 text-white font-semibold rounded-md hover:bg-red-700 transition-colors duration-200"
+                        class="py-1.5 px-4 rounded text-red-600 bg-white border-2 border-red-600 hover:text-white hover:bg-red-600 duration-200"
                         >
                             Se déconnecter
                     </button>

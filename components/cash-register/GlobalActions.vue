@@ -39,14 +39,14 @@
             <div class="flex w-4/5 space-x-4">
                 <!-- Cash payment button -->
                 <button
-                    class="flex-1 inline-flex items-center justify-center h-12 rounded text-white bg-blue-500"
+                    class="flex-1 inline-flex items-center justify-center h-12 rounded text-white bg-primary-500 hover:bg-primary-700 duration-200"
                     @click="modalCashPaymentOpen = true"
                 >
                     <IconsBankNotes class="w-6 h-6" />
                 </button>
                 <!-- Terminal payment button -->
                 <button
-                    class="flex-1 inline-flex items-center justify-center h-12 rounded text-white bg-blue-500"
+                    class="flex-1 inline-flex items-center justify-center h-12 rounded text-white bg-primary-500 hover:bg-primary-700 duration-200"
                     @click="modalTerminalPaymentOpen = true"
                 >
                     <IconsCreditCard class="w-6 h-6" />
@@ -55,14 +55,14 @@
             <div class="flex w-1/5 space-x-4">
                 <!-- Add article manually button -->
                 <button
-                    class="flex-1 inline-flex items-center justify-center h-12 rounded text-white bg-green-500"
+                    class="flex-1 inline-flex items-center justify-center h-12 rounded text-white bg-primary-500 hover:bg-primary-700 duration-200"
                     @click="modalArticleAddOpen = true"
                 >
                     <IconsPlusCircle class="w-6 h-6" />
                 </button>
                 <!-- Delete ticket button -->
                 <button
-                    class="flex-1 inline-flex items-center justify-center h-12 rounded text-white bg-red-500"
+                    class="flex-1 inline-flex items-center justify-center h-12 rounded text-red-600 bg-white border-2 border-red-600 hover:text-white hover:bg-red-600 duration-200"
                     @click="modalDeleteTicketOpen = true"
                 >
                     <IconsTrash class="w-6 h-6" />

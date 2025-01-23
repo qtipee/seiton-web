@@ -8,7 +8,7 @@
                 <!-- Add new article button -->
                 <NuxtLink
                     to="/app/stock/new"
-                    class="rounded bg-white py-1 px-3 text-left text-gray-900"
+                    class="rounded bg-white py-1 px-3 text-left text-gray-900 hover:bg-gray-100 duration-200"
                 >
                     <span class="flex items-center space-x-1">
                         <IconsPlusCircle class="size-3.5 pt-0.5" />

@@ -8,7 +8,7 @@
             <div class="flex flex-row-reverse items-center gap-4">
                 <!-- Send ticket by email button -->
                 <button
-                    class="rounded bg-white py-1 px-3 text-left text-gray-900"
+                    class="rounded bg-white py-1 px-3 text-left text-gray-900 hover:bg-gray-100 duration-200"
                     @click="modalSendEmailOpen = true"
                 >
                     <span class="flex items-center space-x-1">
