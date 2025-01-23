@@ -1,0 +1,37 @@
+name: Build Application
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build-and-upload:
+    name: Build Application
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18' # Adjust the version as needed
+
+      # Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Build the Nuxt app
+      - name: Build Nuxt app
+        run: npm run generate
+
+      # Upload the generated static site as an artifact
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: seiton-web
+          path: .output/public/ # Adjust the path if needed based on your Nuxt configuration
