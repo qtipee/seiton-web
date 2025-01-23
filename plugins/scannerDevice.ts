@@ -2,12 +2,10 @@ export class ScannerDevice {
     private inputBuffer: string = '';
     private endDelimiter: string ='\r'; // Enter key as the delimiter
 
-    public barcodeScanned = ref<[string, string][]>([]); // Array to store emitted barcodes
-    public activeTab = ref<string>('default');
+    public barcodeScanned = ref<[string]>(['']); // Array to store emitted barcodes
 
-    constructor(activeTab: string) {
-        this.activeTab.value = activeTab;
-        this.startListening();
+    constructor() {
+        //this.startListening();
     }
 
     private startListening() {
@@ -32,13 +30,13 @@ export class ScannerDevice {
     private processScannedInput() {
         if (this.inputBuffer.length > 0) {
             // Emit the scanned barcode and active tab
-            this.barcodeScanned.value.push([this.inputBuffer, this.activeTab.value]);
+            this.barcodeScanned.value.push(this.inputBuffer);
         }
     }
 }
 
 export default defineNuxtPlugin(() => {
-    const scannerDevice = reactive(new ScannerDevice('default'));
+    const scannerDevice = reactive(new ScannerDevice());
     return {
         provide: {
             scannerDevice,

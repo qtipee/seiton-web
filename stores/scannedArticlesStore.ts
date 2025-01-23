@@ -12,9 +12,6 @@ export const useScannedArticlesStore = defineStore('scannedArticles', () => {
     // Dependencies (services)
     const { updateArticlesQuantity } = useArticleService();
     const { createTicket } = useTicketService();
-    
-    // Scanner device
-    const { $scannerDevice } = useNuxtApp();
 
     /// STATE ///
 
@@ -236,23 +233,6 @@ export const useScannedArticlesStore = defineStore('scannedArticles', () => {
         // Try to retrieve active ticket index from local storage
         activeTicketIndex.value = parseInt(localStorage.getItem('activeTicketIndex') || '0');
     };
-
-    // Watchers
-    /*
-    watch(
-        () => $scannerDevice.barcodeScanned,
-        (newScans) => {
-            if (newScans.value.length > 0) {
-                const lastScan = newScans.value.pop();
-                if (lastScan) {
-                    const [barcode, activeTab] = lastScan;
-                    addScannedArticle(barcode, 1);
-                }
-            }
-        },
-        { deep: true }
-    );
-    */
 
     return {
         validatedTicketId,
