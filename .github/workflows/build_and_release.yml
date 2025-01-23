@@ -16,13 +16,13 @@ jobs:
     steps:
       # Checkout the repository
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # Set up Node.js
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '22.x'
 
       # Install dependencies
       - name: Install dependencies
@@ -34,29 +34,15 @@ jobs:
 
       # Compress the static output
       - name: Archive static files
-        run: |
-          mkdir -p release-assets
-          zip -r release-assets/seiton-web.zip .output/public/
+        run: zip -r seiton-web.zip .output/public/
 
-      # Create a release
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions
-        with:
-          tag_name: ${{ github.ref_name }}
-          release_name: "Release ${{ github.ref_name }}"
-          draft: false
-          prerelease: false
-
-      # Upload the compressed static files as an asset to the release
-      - name: Upload Release Asset
-        uses: actions/upload-release-asset@v1
+      # Create release with Attachment
+      - name: Create Release with Attachment
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: release-assets/seiton-web.zip
-          asset_name: seiton-web.zip
-          asset_content_type: application/zip
+          tag: ${{ github.ref_name }}
+        run: |
+          gh release create "$tag" seiton-web.zip \
+            --repo="$GITHUB_REPOSITORY" \
+            --title="${GITHUB_REPOSITORY#*} ${tag#v}" \
+            --generate-notes
