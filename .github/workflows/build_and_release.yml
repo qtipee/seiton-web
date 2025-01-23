@@ -1,0 +1,57 @@
+name: Build and Release App
+
+on:
+  push:
+    tags:
+      - '*' # Triggers when any new tag is pushed
+
+jobs:
+  build-and-release:
+    name: Build and Attach App to Release
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      # Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Build the Nuxt app
+      - name: Build Nuxt app
+        run: npm run generate
+
+      # Compress the static output
+      - name: Archive static files
+        run: |
+          mkdir -p release-assets
+          tar -czf release-assets/seiton-web.tar.gz -C .output/public/ .
+
+      # Create a release and upload the artifact
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{ github.ref_name }}
+          release_name: "Release ${{ github.ref_name }}"
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      # Upload the compressed static files as an asset to the release
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: release-assets/seiton-web.tar.gz
+          asset_name: seiton-web.tar.gz
+          asset_content_type: application/gzip
