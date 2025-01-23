@@ -2,12 +2,12 @@
     <div class="flex flex-row-reverse items-center gap-4">
         <!-- New tab ticket button -->
         <button
-            class="rounded bg-white py-1.5 px-3 text-left text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300"
+            class="rounded bg-white py-1 px-3 text-left text-gray-900"
             @click="scannedArticlesStore.addNewTicket"
         >
             <span class="flex items-center space-x-2">
-                <IconsShoppingCart class="size-4" />
-                <span class="text-sm font-semibold">Nouveau Ticket</span>
+                <IconsShoppingCart class="size-3.5" />
+                <span class="text-sm">Nouveau Ticket</span>
             </span>
         </button>
 

@@ -10,11 +10,19 @@ export const useArticleService = () => {
         return await $database.getArticles();
     }
 
+
     /**
      * Return the article associated with the given ID if it exists.
      */
-    const getArticle = async (articleID: string): Promise<Article | null> => {
-        return await $database.getArticleById(articleID);
+    const getArticle = async (id: string): Promise<Article | null> => {
+        return await $database.getArticle(id);
+    };
+
+    /**
+     * Return the article associated to the given article ID if it exists.
+     */
+    const getArticleByArticleID = async (articleID: string): Promise<Article | null> => {
+        return await $database.getArticleByArticleID(articleID);
     };
 
     /**
@@ -54,6 +62,7 @@ export const useArticleService = () => {
     return {
         getArticles,
         getArticle,
+        getArticleByArticleID,
         addArticle,
         updateArticle,
         updateArticlesQuantity,

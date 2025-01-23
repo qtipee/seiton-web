@@ -19,7 +19,7 @@ export const useScannedArticlesStore = defineStore('scannedArticles', () => {
     /// STATE ///
 
     // List of tickets in creation
-    let ticketsOpen = reactive<Ticket[]>([]);
+    const ticketsOpen = ref<Ticket[]>([]);
     
     // Selected ticket index
     const activeTicketIndex = ref(0);
@@ -30,7 +30,7 @@ export const useScannedArticlesStore = defineStore('scannedArticles', () => {
     /// GETTERS ///
 
     // Selected ticket
-    const currentTicket = computed(() => ticketsOpen[activeTicketIndex.value]);
+    const currentTicket = computed(() => ticketsOpen.value[activeTicketIndex.value]);
 
     /// ACTIONS ///
 
@@ -52,7 +52,7 @@ export const useScannedArticlesStore = defineStore('scannedArticles', () => {
             current.scannedArticles[index].quantity += quantity;
         } else {
             // The ticket does not contain the article yet: add it
-            const article = await articlesStore.getArticleById(articleID);
+            const article = await articlesStore.getArticleByArticleID(articleID);
 
             if (article) {
                 const scannedArticle: ScannedArticle = {  article, quantity, };
@@ -95,7 +95,7 @@ export const useScannedArticlesStore = defineStore('scannedArticles', () => {
      * @param {number} index 
      */
     const selectActiveTicket = (index: number) => {
-        if (index >= 0 && index < ticketsOpen.length) {
+        if (index >= 0 && index < ticketsOpen.value.length) {
             activeTicketIndex.value = index;
             localStorage.setItem('activeTicketIndex', String(activeTicketIndex.value));
         }
@@ -106,9 +106,9 @@ export const useScannedArticlesStore = defineStore('scannedArticles', () => {
      */
     const addNewTicket = () => {
         // Max 6 tickets
-        if (ticketsOpen.length >= 6) return;
+        if (ticketsOpen.value.length >= 6) return;
 
-        ticketsOpen.push({
+        ticketsOpen.value.push({
             scannedArticles: [],
             rawDiscount: 0.0,
             percentageDiscount: 0.0,
@@ -117,20 +117,20 @@ export const useScannedArticlesStore = defineStore('scannedArticles', () => {
         });
 
         // Select the latest ticket
-        activeTicketIndex.value = ticketsOpen.length - 1;
+        activeTicketIndex.value = ticketsOpen.value.length - 1;
     };
 
     /**
      * Delete the current ticket.
      */
     const deleteCurrentTicket = () => {
-        if (ticketsOpen.length > 1) {
+        if (ticketsOpen.value.length > 1) {
             // There is more than 1 ticket
-            ticketsOpen.splice(activeTicketIndex.value, 1);
-            activeTicketIndex.value = Math.min(activeTicketIndex.value, ticketsOpen.length - 1);
+            ticketsOpen.value.splice(activeTicketIndex.value, 1);
+            activeTicketIndex.value = Math.min(activeTicketIndex.value, ticketsOpen.value.length - 1);
         } else {
             // Reset the single ticket
-            ticketsOpen[0] = {
+            ticketsOpen.value[0] = {
                 scannedArticles: [],
                 rawDiscount: 0.0,
                 percentageDiscount: 0.0,
@@ -210,7 +210,7 @@ export const useScannedArticlesStore = defineStore('scannedArticles', () => {
      * Save ticketsOpen list to local storage.
      */
     const saveToLocalStorage = () => {
-        localStorage.setItem('ticketsOpen', JSON.stringify(ticketsOpen));
+        localStorage.setItem('ticketsOpen', JSON.stringify(ticketsOpen.value));
     };
 
     /**
@@ -222,7 +222,7 @@ export const useScannedArticlesStore = defineStore('scannedArticles', () => {
 
         if (storedTickets.length === 0) {
             // Ensure at least one ticket exists
-            ticketsOpen = [{ 
+            ticketsOpen.value = [{ 
                 scannedArticles: [], 
                 rawDiscount: 0.0, 
                 percentageDiscount: 0.0, 
@@ -230,7 +230,7 @@ export const useScannedArticlesStore = defineStore('scannedArticles', () => {
                 paymentMethod: PaymentMethod.UNDEFINED 
             }];
         } else {
-            ticketsOpen = storedTickets;
+            ticketsOpen.value = storedTickets;
         }
 
         // Try to retrieve active ticket index from local storage

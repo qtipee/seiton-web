@@ -40,7 +40,7 @@ export const useArticlesStore = defineStore('articles', () => {
      * @param articleID {string}
      * @returns {Promise<Article | null>}
      */
-    const getArticleById = async (articleID: string): Promise<Article | null> => {
+    const getArticleByArticleID = async (articleID: string): Promise<Article | null> => {
         if (!articleID) {
             return null;
         }
@@ -59,7 +59,7 @@ export const useArticlesStore = defineStore('articles', () => {
 
     return {
         articles: computed(() => articles.value),
-        getArticleById,
+        getArticleByArticleID,
         init,
     };
 });

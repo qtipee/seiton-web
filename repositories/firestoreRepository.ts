@@ -20,8 +20,19 @@ export class FirestoreRepository implements DatabaseRepository {
             return [];
         }
     }
+
+    async getArticle(id: string): Promise<Article | null> {
+        try {
+            const articleRef = doc(this.db, 'articles', id);
+            const articleDoc = await getDoc(articleRef);
+            return articleDoc.exists() ? (articleDoc.data() as Article) : null;
+        } catch (error) {
+            console.error('Error fetching ticket:', error);
+            return null;
+        }
+    }
     
-    async getArticleById(articleID: string): Promise<Article | null> {
+    async getArticleByArticleID(articleID: string): Promise<Article | null> {
         try {
             const querySnapshot = await getDocs(collection(this.db, 'articles'));
             const articleDoc = querySnapshot.docs.find((doc) => doc.data().articleID === articleID);
