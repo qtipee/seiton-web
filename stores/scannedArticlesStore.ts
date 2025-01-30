@@ -55,6 +55,7 @@ export const useScannedArticlesStore = defineStore('scannedArticles', () => {
                 const scannedArticle: ScannedArticle = {  article, quantity, };
                 current.scannedArticles.push(scannedArticle);
             } else {
+                // TODO: display a message + define price on the fly
                 console.error(`Article not found: ${articleID}`);
             }
         }

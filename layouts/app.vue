@@ -30,6 +30,8 @@ import DocumentCurrencyDollar from '~/components/icons/DocumentCurrencyDollar.vu
 import ArchiveBox from '~/components/icons/ArchiveBox.vue';
 import Cog6Tooth from '~/components/icons/Cog6Tooth.vue';
 
+const { $scannerDevice } = useNuxtApp();
+
 // Tabs and current tab
 const currentTab = ref('');
 const tabs = [
@@ -59,12 +61,49 @@ const tabs = [
     },
 ];
 
+// Set the current tab based on the URL changes
 watch(() => useRoute().path, (newPath) => {
-    // Set the current tab based on the url
     const matchedTab = tabs.find((tab) => newPath.includes(tab.slug));
 
     if (matchedTab) {
         currentTab.value = matchedTab.slug;
     }
 }, { immediate: true });
+
+/**
+ * Handle the scanned barcode for the Cash Register tab.
+ * Add the scanned article to the current list.
+ * @param {string} barcode The scanned barcode.
+ */
+const handleCashRegisterScan = (barcode: string) => {
+    useScannedArticlesStore().addScannedArticle(barcode, 1);
+};
+
+/**
+ * Handle the scanned barcode for the Stock tab.
+ * Navigate to the add/update article page.
+ * @param {string} barcode The scanned barcode.
+ */
+const handleStockScan = (barcode: string) => {
+    navigateTo(`/app/stock/${barcode}`);
+};
+
+// Associate a tab to a callback function when a barcode is scanned
+const barcodeHandlers: Record<string, (barcode: string) => void> = {
+    'cash-register': handleCashRegisterScan,
+    'stock': handleStockScan,
+};
+
+// Execute a function based on the current tab when a barcode is scanned
+watch(() => $scannerDevice.lastScannedBarcode, (newBarcode) => {
+    if (newBarcode !== null) {
+        // Execute a specific function based on the current tab
+        if (currentTab.value in barcodeHandlers) {
+            barcodeHandlers[currentTab.value](newBarcode);
+        }
+
+        // Reset last scanned barcode
+        $scannerDevice.lastScannedBarcode = null;
+    }
+});
 </script>

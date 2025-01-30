@@ -1,28 +1,37 @@
 export class ScannerDevice {
+    // Scanned data (numbers composing the barcode)
     private inputBuffer: string = '';
-    private endDelimiter: string ='\r'; // Enter key as the delimiter
+    // Enter key as the delimiter
+    private endDelimiter: string ='Enter';
+    private lastInputTime: number = 0;
+    // Max time (ms) between characters to be considered a scan
+    private scanThreshold: number = 50; 
 
-    public barcodeScanned = ref<[string]>(['']); // Array to store emitted barcodes
+    // Latest scanned barcode
+    public lastScannedBarcode = ref<string | null>(null);
 
     constructor() {
-        //this.startListening();
+        this.startListening();
     }
 
     private startListening() {
         window.addEventListener('keydown', (event: KeyboardEvent) => {
-            const characters = event.key;
-            if (!characters) return;
+            const currentTime = Date.now();
+            const timeSinceLastInput = currentTime - this.lastInputTime;
+            this.lastInputTime = currentTime;
 
-            for (const character of characters) {
-                if (character === this.endDelimiter) {
-                    // Process complete barcode
-                    this.processScannedInput();
-                    // Reset the buffer
-                    this.inputBuffer = '';
-                } else {
-                    // Append the pressed key to the buffer
-                    this.inputBuffer += character;
-                }
+            if (timeSinceLastInput > this.scanThreshold) {
+                this.inputBuffer = '';
+            }
+
+            if (event.key === this.endDelimiter) {
+                // Process complete barcode
+                this.processScannedInput();
+                // Reset the buffer
+                this.inputBuffer = '';
+            } else {
+                // Append the pressed key to the buffer
+                this.inputBuffer += event.key;
             }
         });
     }
@@ -30,7 +39,7 @@ export class ScannerDevice {
     private processScannedInput() {
         if (this.inputBuffer.length > 0) {
             // Emit the scanned barcode and active tab
-            this.barcodeScanned.value.push(this.inputBuffer);
+            this.lastScannedBarcode.value = this.inputBuffer;
         }
     }
 }

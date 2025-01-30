@@ -1,11 +1,12 @@
-import { signInWithEmailAndPassword, signOut, onAuthStateChanged, type User } from 'firebase/auth';
+import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
 
 export const useAuth = () => {
-    const { $auth } = useNuxtApp();
+    const { $auth, $user } = useNuxtApp();
 
     const login = async (email: string, password: string) => {
         try {
-            await signInWithEmailAndPassword($auth, email, password);
+            const userCredential = await signInWithEmailAndPassword($auth, email, password);
+            $user.value = userCredential.user;
         } catch (error) {
             console.log('Login error:', error);
             throw error;
@@ -15,6 +16,7 @@ export const useAuth = () => {
     const logout = async () => {
         try {
             await signOut($auth);
+            $user.value = null;
         } catch (error) {
             console.log('Logout error:', error);
             throw error;
@@ -22,6 +24,7 @@ export const useAuth = () => {
     };
 
     return {
+        user: $user,
         login,
         logout,
     };
