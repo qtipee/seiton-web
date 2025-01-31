@@ -26,7 +26,10 @@
 import { httpsCallable } from 'firebase/functions';
 
 const { $functions } = useNuxtApp();
-const createAndEmailTicketPDF = httpsCallable($functions, 'createAndEmailTicketPDF');
+const createAndEmailTicketPDF = httpsCallable(
+    $functions, useRuntimeConfig().public.functions.sendEmail,
+);
+console.log(useRuntimeConfig().public.functions.sendEmail);
 
 const props = defineProps({
     open: {
