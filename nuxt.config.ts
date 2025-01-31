@@ -4,9 +4,6 @@ export default defineNuxtConfig({
     ssr: false,
     runtimeConfig: {
         public: {
-            apiRoutes: {
-                sendTicketEmailUrl: 'https://europe-west6-mogumart-seiton.cloudfunctions.net/createAndEmailTicketPDF',
-            },
             firebaseConfig: {
                 apiKey: 'AIzaSyCeaL8D5Uu5Wms4-4NAgxy-JXq-W3WsDDI',
                 authDomain: 'mogumart-seiton.firebaseapp.com',

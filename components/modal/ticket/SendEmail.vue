@@ -23,6 +23,11 @@
 </template>
 
 <script setup lang="ts">
+import { httpsCallable } from 'firebase/functions';
+
+const { $functions } = useNuxtApp();
+const createAndEmailTicketPDF = httpsCallable($functions, 'createAndEmailTicketPDF');
+
 const props = defineProps({
     open: {
         type: Boolean,
@@ -43,7 +48,7 @@ const localOpen = computed({
     set: (value) => emit('update:open', value), // Emit changes back to parent
 });
 
-const email = ref("");
+const email = ref('');
 
 /**
  * Send the ticket by email if accepted.
@@ -51,22 +56,12 @@ const email = ref("");
  */
 const sendByEmail = async (accepted: boolean) => {
     if (accepted && email.value && props.ticketId) {
-        const url = useRuntimeConfig().public.apiRoutes.sendTicketEmailUrl as string;
-
         try {
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    email: email.value,
-                    ticketId: props.ticketId,
-                }),
-            });
-            // TODO: test
-            console.log('RESPONSE:', response.status);
+            const response = await createAndEmailTicketPDF({ email: email.value, ticketId: props.ticketId });
+            // TODO: toast
+            console.log(response.data);
         } catch (error) {
+            // TODO: toast
             console.error(`Error while sending email: ${error}`);
         }
     }

@@ -1,6 +1,7 @@
 import { initializeApp, type FirebaseOptions } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
-import { getAuth, onAuthStateChanged, type User } from 'firebase/auth';
+import { getAuth, type User } from 'firebase/auth';
+import { getFunctions } from 'firebase/functions';
 
 export default defineNuxtPlugin(() => {
     // Initialize Firebase
@@ -14,16 +15,15 @@ export default defineNuxtPlugin(() => {
     const auth = getAuth(app);
     const user = useState<User | null>('user', () => null);
 
-    // Track authentication state
-    onAuthStateChanged(auth, (currentUser) => {
-        user.value = currentUser;
-    });
+    // Functions
+    const functions = getFunctions(app, 'europe-west6');
 
     return {
         provide: {
             firestore: db,
             auth: auth,
             user: user,
+            functions: functions,
         },
     };
 });
