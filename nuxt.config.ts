@@ -19,15 +19,12 @@ export default defineNuxtConfig({
     },
     compatibilityDate: '2024-11-01',
     devtools: { enabled: false },
-    modules: ['@pinia/nuxt', '@vite-pwa/nuxt'],
+    modules: ['@pinia/nuxt'],
     css: ['~/assets/css/main.css'],
     postcss: {
         plugins: {
             tailwindcss: {},
             autoprefixer: {},
         },
-    },
-    pwa: {
-        registerType: 'autoUpdate',
     },
 });
