@@ -2,6 +2,7 @@
 export default defineNuxtConfig({
     // Client-side rendering only
     ssr: false,
+    // For Github Pages URL
     app: {
         baseURL: '/seiton-web/',
     },
