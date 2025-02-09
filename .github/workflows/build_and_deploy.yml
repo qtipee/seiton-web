@@ -48,7 +48,7 @@ jobs:
           # Create a temporary directory for the build output
           mkdir gh-pages
           # Copy the build output to the temporary directory
-          cp -r dist/* gh-pages/
+          cp -r .output/public/* gh-pages/
 
           # Configure Git user credentials
           git config --global user.name "Github Actions"
