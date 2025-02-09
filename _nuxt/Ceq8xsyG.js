@@ -1,0 +1,1 @@
+const n=(t,o=!1)=>{const e=t.toDate(),a=e.toLocaleDateString();if(o){const r=e.toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});return`${a} ${r}`}return a},i=t=>new Intl.DateTimeFormat("fr-FR").format(t);export{i as a,n as f};

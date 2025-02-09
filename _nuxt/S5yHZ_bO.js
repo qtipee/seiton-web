@@ -1,0 +1,1 @@
+import{Y as n,a1 as e,a2 as u}from"./B9Jdsbtr.js";const g=()=>{const{$auth:s,$user:t}=n();return{user:t,login:async(o,a)=>{try{const r=await e(s,o,a);t.value=r.user}catch(r){throw console.log("Login error:",r),r}},logout:async()=>{try{await u(s),t.value=null}catch(o){throw console.log("Logout error:",o),o}}}};export{g as u};
