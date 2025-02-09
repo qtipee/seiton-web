@@ -2,6 +2,10 @@
 export default defineNuxtConfig({
     // Client-side rendering only
     ssr: false,
+    app: {
+        baseURL: '/seiton-web/',
+        cdnURL: '/seiton-web/',
+    },
     runtimeConfig: {
         public: {
             firebaseConfig: {
