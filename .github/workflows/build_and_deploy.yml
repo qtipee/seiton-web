@@ -7,10 +7,12 @@ on:
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
 
 jobs:
-  build-and-release:
-    name: Build and Attach App to Release
+  build-and-deploy:
+    name: Build and Deploy to Github Pages
     runs-on: ubuntu-latest
 
     steps:
@@ -30,7 +32,7 @@ jobs:
 
       # Build the Nuxt app
       - name: Build Nuxt app
-        run: npm run generate
+        run: npm run build
         env:
           PUBLIC_FIREBASE_API_KEY: ${{ secrets.PUBLIC_FIREBASE_API_KEY }}
           PUBLIC_FIREBASE_AUTH_DOMAIN: ${{ secrets.PUBLIC_FIREBASE_AUTH_DOMAIN }}
@@ -40,17 +42,27 @@ jobs:
           PUBLIC_FIREBASE_APP_ID: ${{ secrets.PUBLIC_FIREBASE_APP_ID }}
           PUBLIC_FIREBASE_FUNCTION_SEND_EMAIL: ${{ vars.PUBLIC_FIREBASE_FUNCTION_SEND_EMAIL }}
 
-      # Compress the static output
-      - name: Archive static files
-        run: zip -r seiton-web.zip .output/public/
-
-      # Create release with Attachment
-      - name: Create Release with Attachment
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          tag: ${{ github.ref_name }}
+      # Deploy to GitHub Pages
+      - name: Deploy to GitHub Pages
         run: |
-          gh release create "$tag" seiton-web.zip \
-            --repo="$GITHUB_REPOSITORY" \
-            --title="seiton-web ${tag#v}" \
-            --generate-notes
+          # Create a temporary directory for the build output
+          mkdir gh-pages
+          # Copy the build output to the temporary directory
+          cp -r dist/* gh-pages/
+
+          # Configure Git user credentials
+          git config --global user.name "Github Actions"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Change to the gh-pages directory
+          cd gh-pages
+
+          # Initialise git, create a new branch and set the remote
+          git init
+          git checkout -b gh-pages
+          git remote add origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+
+          # Add all files, commit and push to the gh-pages branch
+          git add .
+          git commit -m "Deploy to Github Pages"
+          git push --force origin gh-pages   
